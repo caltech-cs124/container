@@ -67,11 +67,11 @@ RUN mkdir ${SWD}/bochs ;\
     wget -nv https://versaweb.dl.sourceforge.net/project/bochs/bochs/2.6.2/bochs-2.6.2.tar.gz && tar -xvzf bochs-2.6.2.tar.gz ;\
     # Apply patches to Bochs
     cd ${SWD}/bochs/bochs-2.6.2 ;\
-    curl https://raw.githubusercontent.com/caltech-cs124-2023sp/bochs-patches/main/bochs-2.6.2-banner-stderr.patch | patch -p1 ;\
-    curl https://raw.githubusercontent.com/caltech-cs124-2023sp/bochs-patches/main/bochs-2.6.2-block-device-check.patch | patch -p1 ;\
-    curl https://raw.githubusercontent.com/caltech-cs124-2023sp/bochs-patches/main/bochs-2.6.2-jitter-plus-segv.patch | patch -p1 ;\
-    curl https://raw.githubusercontent.com/caltech-cs124-2023sp/bochs-patches/main/bochs-2.6.2-link-tinfo.patch | patch -p1 ;\
-    curl https://raw.githubusercontent.com/caltech-cs124-2023sp/bochs-patches/main/bochs-2.6.2-xrandr-pkgconfig.patch | patch -p1 ;\
+    curl https://raw.githubusercontent.com/caltech-cs124-2023sp/container/main/bochs-2.6.2-banner-stderr.patch | patch -p1 ;\
+    curl https://raw.githubusercontent.com/caltech-cs124-2023sp/container/main/bochs-2.6.2-block-device-check.patch | patch -p1 ;\
+    curl https://raw.githubusercontent.com/caltech-cs124-2023sp/container/main/bochs-2.6.2-jitter-plus-segv.patch | patch -p1 ;\
+    curl https://raw.githubusercontent.com/caltech-cs124-2023sp/container/main/bochs-2.6.2-link-tinfo.patch | patch -p1 ;\
+    curl https://raw.githubusercontent.com/caltech-cs124-2023sp/container/main/bochs-2.6.2-xrandr-pkgconfig.patch | patch -p1 ;\
     cd ${SWD}/bochs ;\
     # Build a normal version of Bochs
     mkdir -p build/bochs ;\
@@ -98,7 +98,8 @@ ARG PREFIX
 
 # Install dependencies
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install libvirt-daemon-system libvirt-clients qemu-system-i386
+    && apt-get -y install build-essential \
+    libvirt-daemon-system libvirt-clients qemu-system-i386
 
 COPY --from=BUILD ${SWD} ${SWD}
 
