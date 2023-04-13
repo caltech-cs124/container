@@ -24,7 +24,10 @@ RUN mkdir binutils &&\
     ../../binutils-2.38/configure --prefix=$PREFIX --target=i386-elf \
     --disable-multilib --disable-nls --disable-werror &&\
     make -j8 &&\
-    make install
+    make install &&\
+    # Clean up
+    cd ${SWD} &&\
+    rm -rf binutils
 
 # Build GCC
 RUN mkdir gcc &&\
@@ -39,7 +42,10 @@ RUN mkdir gcc &&\
     make -j8 all-gcc &&\
     make install-gcc &&\
     make all-target-libgcc &&\
-    make install-target-libgcc
+    make install-target-libgcc &&\
+    # Clean up
+    cd ${SWD} &&\
+    rm -rf gcc
 
 # Build GDB
 RUN mkdir ${SWD}/gdb &&\
@@ -50,7 +56,10 @@ RUN mkdir ${SWD}/gdb &&\
     cd ${SWD}/gdb/build/gdb &&\
     ../../gdb-12.1/configure --prefix=$PREFIX --target=i386-elf --disable-werror &&\
     make -j8 &&\
-    make install
+    make install &&\
+    # Clean up
+    cd ${SWD} &&\
+    rm -rf gdb
 
 # Build Bochs
 RUN mkdir ${SWD}/bochs &&\
@@ -76,7 +85,10 @@ RUN mkdir ${SWD}/bochs &&\
     cd ${SWD}/bochs/build/bochs-dbg &&\
     ../../bochs-2.6.2/configure --with-term --with-nogui --enable-debugger --disable-debugger-gui --prefix=$PREFIX CFLAGS="-w -fpermissive" CXXFLAGS="-w -fpermissive" &&\
     make -j8 &&\
-    cp ./bochs ${PREFIX}/bin/bochs-dbg
+    cp ./bochs ${PREFIX}/bin/bochs-dbg &&\
+    # Clean up
+    cd ${SWD} &&\
+    rm -rf bochs
 
 # Assembly stage
 # Only copy over what is purely needed
