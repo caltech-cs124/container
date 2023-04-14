@@ -7,8 +7,8 @@
    2. This is also a part of the Remote Development extension pack for VSCode, which you may find useful.
 3. Obtain a compatible Docker container for your system:
    1. Use one of the pre-built Docker containers provided by the course (check the releases on the sidebar for a download link):
-      1. **X86_64:** `ubuntu_i386cross_x86_64.tar.gz`
-      2. **ARM64:** `ubuntu_i386cross_arm64.tar.gz` (not yet available)
+      1. **X86_64:** `ubuntu_i386cross_x86_64.tar.xz`
+      2. **ARM64:** `ubuntu_i386cross_arm64.tar.xz` (not yet available)
    2. Build your own container from the provided `Dockerfile`, instructions available [below](#building-containers).
 4. Load the Docker container tarball using the following command:
    1. `docker load --input ubuntu_i386_gcc_{ARCH}` where `{ARCH}` is `x86_64` or `arm64` respectively.
@@ -48,24 +48,32 @@
     3.  To make sure everything works fine, you should `cd src/threads` and run `make check`.
 
 # Building Containers
-There is a provided `Dockerfile` in this repository that can be used to build the container. You can build it using this command. Keep in note that the `Dockerfile` must be in the `.` (current) directory.
-```sh
-docker build -t ubuntu_i386cross --progress=plain .
-```
-This can take up to 20 minutes or longer to build (i9-9880H CPU @ 2.30GHz, 16GB RAM) and can take up to 3GB of storage. The build process requires 7GB of storage. Docker will build the tools in 2 stages:
-1. Build the cross-compilation tools to the `i386-elf` architecture with all of the dependencies.
-2. Transfer only the build artifacts and installs the necessary tools for development (`build-essential` and `qemu-system-i386`).
+| Tools    |  Version |
+| -------- | -------: |
+| Binutils |   `2.38` |
+| GCC      | `12.1.0` |
+| GDB      | `12.1.0` |
+| Bochs    |  `2.6.2` |
 
-The versions of tools being used are:
-* Binutils 2.38
-* GCC 12.1.0
-* GDB 12.1.0
-* Bochs 2.6.2
+There is a provided `Dockerfile` in this repository that is used to build the container.
+1. You can build it using this command. Keep in note that the corresponding `Dockerfile` must be in the `.` (current) directory.
+    ```sh
+    docker build -t ubuntu_i386cross --progress=plain .
+    ```
+2. This can take up to 20 minutes or longer to build (i9-9880H CPU @ 2.30GHz, 16GB RAM) and can take up to 3GB of storage. The build process requires 7GB of storage. Docker will build the tools in 2 stages:
+   1. Build the cross-compilation tools to the `i386-elf` architecture with all of the dependencies.
+   2. Transfer only the build artifacts and installs the necessary tools for development (`build-essential` and `qemu-system-i386`).
 
-Once it is complete, you should run `docker image ls` to find an entry with the name `ubuntu_i386cross`.
-```
-REPOSITORY                                                                                TAG       IMAGE ID       CREATED          SIZE
-ubuntu_i386cross                                                                          latest    1d5542e7ef09   11 seconds ago   2.27GB
-```
-
-You can then integrate it into your editor of choice. Instructions for VSCode are the same as step 5 and beyond from this point.
+3. Once it is complete, you should run `docker image ls` to find an entry with the name `ubuntu_i386cross`.
+    ```
+    REPOSITORY                                                                                TAG       IMAGE ID       CREATED          SIZE
+    ubuntu_i386cross                                                                          latest    1d5542e7ef09   11 seconds ago   2.27GB
+    ```
+4. The image can be saved into a compressed tarball using the following command.
+    ```sh
+    # Create a tar.xz (high compression ratio, slower)
+    docker save ubuntu_i386cross | xz > ubuntu_i386cross_x86_64.tar.xz
+    # Create a tar.gz (worse compression ratio, faster)
+    docker save ubuntu_i386cross | gzip > ubuntu_i386cross_x86_64.tar.gz
+    ```
+5. You can then integrate it into your editor of choice. Instructions for VSCode are the same as step 5 and beyond from this point.
