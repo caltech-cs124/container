@@ -1,0 +1,62 @@
+diff --git a/src/Make.config b/src/Make.config
+index 5e0ef54..b727c9c 100644
+--- a/src/Make.config
++++ b/src/Make.config
+@@ -15,15 +15,9 @@ ifneq (0, $(shell expr `uname -m` : '$(X86)'))
+   LD = ld
+   OBJCOPY = objcopy
+ else
+-  ifneq (0, $(shell expr `uname -m` : '$(X86_64)'))
+-    CC = gcc -m32
+-    LD = ld -melf_i386
+-    OBJCOPY = objcopy
+-  else
+-    CC = i386-elf-gcc
+-    LD = i386-elf-ld
+-    OBJCOPY = i386-elf-objcopy
+-  endif
++  CC = i386-elf-gcc
++  LD = i386-elf-ld
++  OBJCOPY = i386-elf-objcopy
+ endif
+ 
+ ifeq ($(strip $(shell command -v $(CC) 2> /dev/null)),)
+diff --git a/src/filesys/filesys.h b/src/filesys/filesys.h
+index faa1e3c..9f9294d 100644
+--- a/src/filesys/filesys.h
++++ b/src/filesys/filesys.h
+@@ -10,7 +10,7 @@
+ /*! @} */
+ 
+ /*! Block device that contains the file system. */
+-struct block *fs_device;
++extern struct block *fs_device;
+ 
+ void filesys_init(bool format);
+ void filesys_done(void);
+diff --git a/src/tests/lib.c b/src/tests/lib.c
+index b054146..27abc8a 100644
+--- a/src/tests/lib.c
++++ b/src/tests/lib.c
+@@ -5,7 +5,7 @@
+ #include <string.h>
+ #include <syscall.h>
+ 
+-const char *test_name;
++__attribute__((weak)) const char *test_name = "";
+ bool quiet = false;
+ 
+ static void vmsg(const char *format, va_list args, const char *suffix) {
+diff --git a/src/utils/pintos b/src/utils/pintos
+index b38b80e..3ac403b 100755
+--- a/src/utils/pintos
++++ b/src/utils/pintos
+@@ -618,7 +618,7 @@ sub run_qemu {
+       if $vga eq 'terminal';
+     print "warning: qemu doesn't support jitter\n"
+       if defined $jitter;
+-    my (@cmd) = ('qemu');
++    my (@cmd) = ('qemu-system-i386');
+     push (@cmd, '-drive',
+           'file=' . $disks[0] . ',index=0,media=disk,format=raw') if defined $disks[0];
+     push (@cmd, '-drive',
