@@ -9,7 +9,7 @@
    1. Use one of the pre-built Docker containers provided by the course (check the releases on the sidebar for a download link):
       1. **X86_64:** `ubuntu_i386cross_x86_64.tar.xz`
       2. **ARM64:** `ubuntu_i386cross_arm64.tar.xz` (not yet available)
-   2. Build your own container from the provided `Dockerfile`, instructions available [below](#building-containers).
+   2. Alternatively, build your own container from the provided `Dockerfile`, instructions available [below](#building-containers).
 4. Load the Docker container tarball using the following command:
    1. `docker load --input ubuntu_i386_gcc_{ARCH}` where `{ARCH}` is `x86_64` or `arm64` respectively.
    2. You can run `docker image ls` to check that the image is correctly loaded. Check for a tag that says `ubuntu_i386cross...`, this will be relevant when setting up a Dockerfile for your development container.
@@ -19,7 +19,7 @@
     ```Dockerfile
     FROM ubuntu_i386cross_{ARCH}
     ```
-    If the `docker image ls` command does not specify an architecture, ie. you built it yourself or some other funky business, then just drop the `_{ARCH}` part from the line above.
+    If the `docker image ls` command does not specify an architecture, then just drop the `_{ARCH}` part from the line above.
 
    2. `.devcontainer/devcontainer.json`
     ```json
