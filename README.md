@@ -41,8 +41,8 @@
 8.  From now on, you should do all your development (or at least, testing) in the container. Try out `make check` or `pintos` commands to make sure it works.
     1.  This is the **minimum viable tools** that you need to compile and run Pintos. You may want to install other useful system tools such
         as `git`, `vim`, `hh`, etc. in the container. This can be done with `apt install git` for example.
-    2.  Afterwards, you may also need to apply the `cross-container.patch` to fix the project for the new tools to accept them.
-        1.  This can be done with `cat cross-container.patch | patch -p1`.
+    2.  **Afterwards, you need to apply the [`cross-container.patch`](./cross-container.patch) to fix the project for the newer GCC tools to compile them.**
+        1.  This can be done with `cat cross-container.patch | patch -p1` in the .
     3.  To make sure everything works fine, you should `cd src/threads` and run `make check`.
 
 # Building Containers
