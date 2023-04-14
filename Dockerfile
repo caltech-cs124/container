@@ -86,8 +86,7 @@ ARG PREFIX
 
 # Install dependencies
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install build-essential \
-    libvirt-daemon-system libvirt-clients qemu-system-i386
+    && apt-get -y install --no-install-recommends build-essential qemu-system-i386
 
 COPY --from=BUILD ${PREFIX} ${PREFIX}
 
