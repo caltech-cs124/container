@@ -57,7 +57,7 @@ RUN mkdir ${SWD}/bochs &&\
     cd ${SWD}/bochs &&\
     wget -nv https://versaweb.dl.sourceforge.net/project/bochs/bochs/2.6.11/bochs-2.6.11.tar.gz && tar -xvzf bochs-2.6.11.tar.gz &&\
     # Apply patches to Bochs
-    cd ${SWD}/bochs/bochs-2.6.11 &&\\
+    cd ${SWD}/bochs/bochs-2.6.11 &&\
     curl https://raw.githubusercontent.com/caltech-cs124-2023sp/container/main/bochs-2.6.11-banner-stderr.patch | patch -p1 &&\
     curl https://raw.githubusercontent.com/caltech-cs124-2023sp/container/main/bochs-2.6.11-jitter-plus-segv.patch | patch -p1 &&\
     curl https://raw.githubusercontent.com/caltech-cs124-2023sp/container/main/bochs-2.6.11-link-tinfo.patch | patch -p1 &&\
