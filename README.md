@@ -5,22 +5,20 @@
 2. Install Dev Containers extension for VSCode.
    1. Further reading on developing inside a container can be found [on VSCode's official documentation](https://code.visualstudio.com/docs/devcontainers/containers).
    2. This is also a part of the Remote Development extension pack for VSCode, which you may find useful.
-3. Obtain a compatible Docker container for your system:
-   1. Use one of the pre-built Docker containers provided by the course (check the releases on the sidebar for a download link):
+3. Obtain a compatible Docker container for your system, by either:
+   1. **Recommended:** Use one of the [pre-built Docker containers](https://github.com/caltech-cs124-2023sp/container/releases/) provided by the course:
       1. **X86_64:** `ubuntu_i386cross_x86_64.tar.xz`
-      2. **ARM64:** `ubuntu_i386cross_arm64.tar.xz` (not yet available)
-   2. Alternatively, build your own container from the provided `Dockerfile`, instructions available [below](#building-containers).
+      2. **ARM64:** `ubuntu_i386cross_arm64.tar.gz`
+   2. **Alternatively:** Build your own container from the provided `Dockerfile`, instructions available [below](#building-containers).
 4. Load the Docker container tarball using the following command:
-   1. `docker load --input ubuntu_i386_gcc_{ARCH}` where `{ARCH}` is `x86_64` or `arm64` respectively.
+   1. `docker load --input ubuntu_i386cross_{x86_64.tar.xz|arm64.tar.gz}`.
    2. You can run `docker image ls` to check that the image is correctly loaded. Check for a tag that says `ubuntu_i386cross...`, this will be relevant when setting up a Dockerfile for your development container.
    3. Once you load the tarball, you can delete the tarball for storage space.
-5. In your checked out Pintos Git repository (the folder that contains `./specs`, `./src`, `./tests`, `LICENSE`, etc.), create two new files:
+5. In your checked out Pintos Git repository `cs124-2023sp-TEAMNAME` folder (the folder that contains `./specs`, `./src`, `./tests`, `LICENSE`, etc.), create two new files:
    1. `.devcontainer/Dockerfile`
     ```Dockerfile
-    FROM ubuntu_i386cross_{ARCH}
+    FROM ubuntu_i386cross
     ```
-    If the `docker image ls` command does not specify an architecture, then just drop the `_{ARCH}` part from the line above.
-
    2. `.devcontainer/devcontainer.json`
     ```json
     {
@@ -35,11 +33,11 @@
    2.  You don’t have to rebuild the container after you build it for the first time; you can just use `Dev Containers: Reopen in Container`.
    3.  When this is successfuly done and you are inside the Docker container in VSCode, you will see `Dev Container: Ubuntu` in the green ribbon on the bottom left.
 7.  Inside your Docker container instance:
-    1.  Edit your `~/.bashrc` file such that the PATH includes your project’s src/utils folder. An example of doing that would to be append this to your `~/.bashrc` file:
+    1.  Edit your `~/.bashrc` file such that the PATH includes your project’s `src/utils` folder. An example of doing that would to be **append this** to your `~/.bashrc` file:
         ```sh
-        export PATH=/home/tools/bin:$PATH:/workspaces/${PROJECT}/src/utils
+        export PATH=$PATH:/workspaces/${PROJECT}/src/utils
         ```
-        You should replace `${PROJECT}` with whatever your repository name is.
+        You should replace `${PROJECT}` with whatever your repository name is. You will need to **reload your `~/.bashrc`** using the command `source ~/.bashrc`.
 8.  From now on, you should do all your development (or at least, testing) in the container. Try out `make check` or `pintos` commands to make sure it works.
     1.  This is the **minimum viable tools** that you need to compile and run Pintos. You may want to install other useful system tools such
         as `git`, `vim`, `hh`, etc. in the container. This can be done with `apt install git` for example.
@@ -48,12 +46,12 @@
     3.  To make sure everything works fine, you should `cd src/threads` and run `make check`.
 
 # Building Containers
-| Tools    |  Version |
-| -------- | -------: |
-| Binutils |   `2.38` |
-| GCC      | `12.1.0` |
-| GDB      | `12.1.0` |
-| Bochs    |  `2.6.2` |
+| Tools    |            Version |
+| -------- | -----------------: |
+| Binutils |             `2.38` |
+| GCC      |           `12.1.0` |
+| GDB      |           `12.1.0` |
+| Bochs    | `2.6.11` + Patches |
 
 There is a provided `Dockerfile` in this repository that is used to build the container.
 1. You can build it using this command. Keep in note that the corresponding `Dockerfile` must be in the `.` (current) directory.
