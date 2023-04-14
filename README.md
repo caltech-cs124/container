@@ -35,7 +35,7 @@ There is a provided `Dockerfile` in this repository that can be used to build th
 ```sh
 docker build -t ubuntu_i386cross --progress=plain .
 ```
-This can take up to 20 minutes or longer to build (i9-9880H CPU @ 2.30GHz, 16GB RAM) and can take up to 3GB of storage. Docker will build the tools in 2 stages:
+This can take up to 20 minutes or longer to build (i9-9880H CPU @ 2.30GHz, 16GB RAM) and can take up to 3GB of storage. The build process requires 7GB of storage. Docker will build the tools in 2 stages:
 1. Build the cross-compilation tools to the `i386-elf` architecture with all of the dependencies.
 2. Transfer only the build artifacts and installs the necessary tools for development (`build-essential` and `qemu-system-i386`).
 
