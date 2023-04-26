@@ -2,6 +2,8 @@
 1. Install Docker Desktop for your platform.
    1. Instructions are available [here](https://docs.docker.com/engine/install/).
    2. Make sure that the Docker Engine/daemon is updated and running.
+      1. If you are on MacOS, make sure that you enable the VirtioFS file sharing implementation in the settings.
+      2. If you are on Windows, enable the WSL2 engine in settings.
 2. Install Dev Containers extension for VSCode.
    1. Further reading on developing inside a container can be found [on VSCode's official documentation](https://code.visualstudio.com/docs/devcontainers/containers).
    2. This is also a part of the Remote Development extension pack for VSCode, which you may find useful.
