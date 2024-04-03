@@ -66,8 +66,8 @@
 6.  Using the VSCode Dev Containers plugin, rebuild and reopen the project in
     the container.
 
-    *   You can use the green remote button `><` on the bottom left of the
-        VSCode window, or open up the `View > Command Palette` and search for
+    *   You can use the remote button `><` on the **bottom left of the
+        VSCode window**, or open up the `View > Command Palette` and search for
         `Dev Containers: Rebuild and Reopen in Container`.
 
     *   You don’t have to rebuild the container after you build it for the
@@ -148,13 +148,20 @@ This repository includes a `Dockerfile` that is used to build the container.
     ```
 
 4.  The image can be saved into a compressed tarball using the following
-    command.
+    command.  Note the use of `uname -m` to incorporate the machine
+    architecture into the generated filename.
 
     ```sh
-    # Create a tar.xz (high compression ratio, slower, requires xz-tools)
-    docker save ubuntu_i386cross | xz > ubuntu_i386cross.tar.xz
-    # Create a tar.gz (worse compression ratio, faster)
-    docker save ubuntu_i386cross | gzip > ubuntu_i386cross.tar.gz
+    # Create a gzipped tarball (worse compression ratio, faster)
+    docker save ubuntu_i386cross | gzip > ubuntu_i386cross-`uname -m`.tgz
+    ```
+
+    Gzip is fast and achieves a reasonable compression level; if you want
+    to achieve higher compression rates then use the `xz` compression utility.
+
+    ```
+    # Create a xz-compressed tarball (high compression ratio, slower, requires xz-tools)
+    docker save ubuntu_i386cross | xz > ubuntu_i386cross-`uname -m`.txz
     ```
 
 5.  You can then integrate the container into your workflow of choice.
