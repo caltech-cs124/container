@@ -46,13 +46,13 @@
     `cs124-YYYYsp-TEAMNAME` folder (the folder that contains `./specs`,
     `./src`, `./tests`, `LICENSE`, etc.), create two new files:
 
-    a.  File `.devcontainer/Dockerfile` with contents:
+    1.  File `.devcontainer/Dockerfile` with contents:
 
         ```Dockerfile
         FROM ubuntu_i386cross
         ```
 
-    b.  File `.devcontainer/devcontainer.json` with contents:
+    2.  File `.devcontainer/devcontainer.json` with contents:
 
         ```json
         {
@@ -133,10 +133,10 @@ This repository includes a `Dockerfile` that is used to build the container.
     16GB RAM) and can take up to 3GB of storage.  The build process requires
     7GB of storage.  Docker will build the tools in 2 stages:
 
-    a.  Build the cross-compilation tools to the `i386-elf` architecture with
+    1.  Build the cross-compilation tools to the `i386-elf` architecture with
         all of the dependencies.
 
-    b.  Transfer only the build artifacts and installs the necessary tools for
+    2.  Transfer only the build artifacts and installs the necessary tools for
         development (`build-essential` and `qemu-system-i386`).
 
 3.  Once it is complete, you should run `docker image ls` to find an entry
