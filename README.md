@@ -23,9 +23,9 @@
     *   **Recommended:** Use one of the [pre-built Docker containers](https://github.com/caltech-cs124/container/releases/)
         provided by the course:
 
-        *   **X86_64:** `ubuntu_i386cross_x86_64.tar.xz`
+        *   **X86_64:** `ubuntu_i386cross-x86_64.tar.xz`
 
-        *   **ARM64:** `ubuntu_i386cross_arm64.tar.gz`
+        *   **ARM64:** `ubuntu_i386cross-arm64.tar.gz`
 
     *   **Alternatively:**  Build your own container from the `Dockerfile`
         provided in this repository, instructions available [below](#building-containers).
