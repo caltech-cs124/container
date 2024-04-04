@@ -30,11 +30,11 @@
     *   **Alternatively:**  Build your own container from the `Dockerfile`
         provided in this repository, instructions available [below](#building-containers).
 
-4.  Load the Docker container tarball using the following command:
+4.  Load the Docker container tarball using a command like this:
 
-    ```
-    docker load --input ubuntu_i386cross_{x86_64.tar.xz|arm64.tar.gz}
-    ```
+    *   For Intel x86 platform:  `docker load --input ubuntu_i386cross-x86_64.tgz`
+
+    *   For ARM-based platform:  `docker load --input ubuntu_i386cross-arm64.tgz`
 
     You can run `docker image ls` to check that the image is correctly loaded.
     Check for a tag that says `ubuntu_i386cross...`; this will be relevant
@@ -63,46 +63,42 @@
         }
         ```
 
-6.  Using the VSCode Dev Containers plugin, rebuild and reopen the project in
-    the container.
+6.  Using the VSCode Dev Containers plugin, reopen the project in the container.
+    **If you have completed the previous steps before opening the project in
+    VSCode, you may be prompted to do this automatically.**
 
-    *   You can use the remote button `><` on the **bottom left of the
+    *   You can use the blue remote button `><` on the **bottom left of the
         VSCode window**, or open up the `View > Command Palette` and search for
-        `Dev Containers: Rebuild and Reopen in Container`.
-
-    *   You don’t have to rebuild the container after you build it for the
-        first time; you can just use `Dev Containers: Reopen in Container`.
+        `Dev Containers: Reopen in Container`.
 
     *   When this is successfully done and you are inside the Docker container
-        in VSCode, you will see `Dev Container: Ubuntu` in the green ribbon on
+        in VSCode, you will see `Dev Container: Ubuntu` in the blue ribbon on
         the bottom left.
 
-7.  **Inside your Docker container instance,** edit your `~/.bashrc` file such
-    that the PATH includes your project’s `src/utils` folder. An example of
-    doing that would to be **append this** to your `~/.bashrc` file:
+7.  You can now open a Terminal window in VSCode, and you should see a prompt
+    like `root@<somehash>:/workspaces/<your_project_path>`.
+
+8.  **Inside your Docker container instance (i.e. in this Terminal window),**
+    edit your `~/.bashrc` file such that the PATH includes your project’s
+    `src/utils` folder. An example of doing that would to be **append this**
+    to your `~/.bashrc` file:
 
     ```sh
-    export PATH=$PATH:/workspaces/${PROJECT}/src/utils
+    export PATH=$PATH:/workspaces/<your_project_path>/src/utils
     ```
 
-    You should replace `${PROJECT}` with whatever your repository name is.
+    (Replace `<your_project_path>` with whatever your repository name is.
 
     After this, **reload your `~/.bashrc`** using the command `source ~/.bashrc`.
 
-8.  Apply the [`cross-container.patch`](./cross-container.patch) to fix the
-    project for the container tools.
+9.  From now on, you can do all your testing in the container.  Try `make check`
+    or `pintos` commands to make sure it works.
 
-    This can be done by running this command in the root folder of the
-    repository:
+    **NOTE:**  Use the non-GUI invocation of `pintos` within the container to
+    avoid confusing output.  For example, to run the `alarm-multiple` test,
+    use `pintos -v -- run alarm-multiple`, _not_ `pintos run alarm-multiple`.
 
-    ```sh
-    cat cross-container.patch | patch -p1
-    ```
-
-9.  From now on, you should do all your development (or at least, testing) in
-    the container.  Try `make check` or `pintos` commands to make sure it works.
-
-    *   The provided container only has the minimum viable tools to compile
+    *   The provided container only has the minimum necessary tools to compile
         and test PintOS.  You may want to install other useful system tools
         such as `git`, `vim`, `hh`, etc. in the container.  This can be done
         with `apt install git` for example. If you believe that we should
@@ -129,7 +125,7 @@ This repository includes a `Dockerfile` that is used to build the container.
     docker build -t ubuntu_i386cross --progress=plain .
     ```
 
-2.  This can take up to 20 minutes or longer to build (i9-9880H CPU @ 2.30GHz,
+    This can take up to 20 minutes or longer to build (i9-9880H CPU @ 2.30GHz,
     16GB RAM) and can take up to 3GB of storage.  The build process requires
     7GB of storage.  Docker will build the tools in 2 stages:
 
@@ -139,17 +135,19 @@ This repository includes a `Dockerfile` that is used to build the container.
     2.  Transfer only the build artifacts and installs the necessary tools for
         development (`build-essential` and `qemu-system-i386`).
 
-3.  Once it is complete, you should run `docker image ls` to find an entry
-    with the name `ubuntu_i386cross`.
+2.  Once it is complete, you should run `docker image ls` to find an entry
+    with the name `ubuntu_i386cross`.  (**NOTE:**  The "IMAGE ID" value will
+    be different.)
 
     ```
     REPOSITORY                     TAG       IMAGE ID       CREATED          SIZE
     ubuntu_i386cross               latest    1d5542e7ef09   11 seconds ago   2.27GB
     ```
 
-4.  The image can be saved into a compressed tarball using the following
+3.  The image can be saved into a compressed tarball using the following
     command.  Note the use of `uname -m` to incorporate the machine
-    architecture into the generated filename.
+    architecture into the generated filename; you can run `uname -m` by
+    itself first to see if it generates reasonable and expected output.
 
     ```sh
     # Create a gzipped tarball (worse compression ratio, faster)
@@ -159,10 +157,10 @@ This repository includes a `Dockerfile` that is used to build the container.
     Gzip is fast and achieves a reasonable compression level; if you want
     to achieve higher compression rates then use the `xz` compression utility.
 
-    ```
+    ```sh
     # Create a xz-compressed tarball (high compression ratio, slower, requires xz-tools)
     docker save ubuntu_i386cross | xz > ubuntu_i386cross-`uname -m`.txz
     ```
 
-5.  You can then integrate the container into your workflow of choice.
+4.  You can then integrate the container into your workflow of choice.
 
